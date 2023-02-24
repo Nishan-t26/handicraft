@@ -7,12 +7,16 @@
     <title>Document</title>
 
     <style>
+        *{
+            transition-duration:1s ;
+        }
         body{
             padding: 0;
             margin: 0;
             list-style: none;
             text-decoration: none;
             overflow: hidden;
+            
         }
         html{
             list-style: none;
@@ -62,6 +66,19 @@
         top: 2px;
         cursor: pointer;
     }
+    .l1.active1{
+        position: relative;
+       rotate: 50deg;
+       top: .5rem;
+
+    }
+    .l2.active2{
+        display: none;
+    }
+    .l3.active3{
+        
+        rotate: -50deg;   
+     }
         .bar hr{
             background-color: black;
             height: .2rem;
@@ -72,12 +89,16 @@
             
         }
 .side_menu{
-    background-color:black;
+    /* background-color:rgb(121, 117, 117); */
+    box-shadow: 5px 10px #d4d2d2;
     float: right;
 position: absolute  ;
 /* top: -5.8rem; */
 padding: 1rem 1.5rem;
-    /* right: -20rem; */
+    right: -20rem;
+}
+.side_menu.active{
+    right: 0;
 }
 
 .side_menu ul {
@@ -85,19 +106,31 @@ margin: 0;
 padding: 0;
 }
 .side_menu ul li{
-background-color: grey;
-color: white;
+background-color: rgb(248, 241, 241);
+color: rgb(19, 18, 18);
 list-style: none;
 text-decoration: none;
 margin: .5rem 0;
 padding: .5rem 2rem;
 
 }
+.side_menu ul li:hover{
+    background-color: rgb(214, 206, 206);
+
+}
 .side_menu ul li a{
     text-decoration: none;
-    color: white;
+    color: rgb(31, 29, 29);
 }
-
+.front_slider{
+    position: relative;
+    height: 35vh;
+    width: 60%;
+    margin: auto;
+    background-color: #faf4f4;
+    box-shadow: 2px 5px 10px #d4d2d2;
+    top: 2rem;
+}
 
 
       
@@ -140,7 +173,7 @@ padding: .5rem 2rem;
     <div class="h1">
         <h1>RAHIM HANDICRAFT</h1>
         <div class="bar" >
-            <hr><hr><hr>
+            <hr class="l1"><hr class="l2"><hr class="l3">
         </div>
     </div>
     <div>
@@ -163,14 +196,27 @@ padding: .5rem 2rem;
             <li><a href="contact.html">Contacts</li>
         </ul>
     </div>
+    <div class="front_slider">
+        <div class="slides">
+
+        </div>
+        <div class="slides">
+
+        </div>
+    </div>
 </body>
 <script src="jquery-3.6.3.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
 <script>
     
-   document.getElementsByClassName(".bar").addEventListener("mousehover",sidemenu);
-   function sidemenu(){
-    document.getElementsByClassName(".side_menu").style.backgroundColor="blue";
-   }
+   $(".bar").click(function(){
+$(".side_menu").toggleClass("active");
+$(".l1").toggleClass("active1");
+$(".l2").toggleClass("active2");
+$(".l3").toggleClass("active3");
+
+   });
 </script>
 </html>
