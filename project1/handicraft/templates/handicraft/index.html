@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
         *{
@@ -130,9 +131,40 @@ padding: .5rem 2rem;
     background-color: #faf4f4;
     box-shadow: 2px 5px 10px #d4d2d2;
     top: 2rem;
+    
 }
+.slides{
+    position: relative;
+    width: 95%;
+    height: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+.slides img{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.left_arr{
+    position: absolute;
+    z-index: 10;
+    font-size: 2rem;
+    top: 45%;
+    left: -1%;
+    cursor: pointer;
 
+}
+.right_arr{
+    position: absolute;
+    left: 97.5%;
+    z-index: 10;
+    font-size: 2rem;
+    top: 45%;
+    cursor: pointer;
 
+   
+}
       
 
 
@@ -180,28 +212,30 @@ padding: .5rem 2rem;
         <nav>
             <UL class="navbar">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="profile.html">Profile</li>
-                <li><a href="products.html">Products</li>
-                <li><a href="infra.html">Infrastructure</li>
-                <li><a href="contact.html">Contacts</li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li><a href="contact.html">Contacts</a></li>
             </UL>
         </nav>
     </div>
     <div class="side_menu" >
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="profile.html">Profile</li>
-            <li><a href="products.html">Products</li>
-            <li><a href="infra.html">Infrastructure</li>
-            <li><a href="contact.html">Contacts</li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="infra.html">Infrastructure</a></li>
+            <li><a href="contact.html">Contacts</a></li>
         </ul>
     </div>
+   
     <div class="front_slider">
+        <i onclick="prev()" class="fa fa-chevron-left left_arr"></i>
+        <i onclick="next()" class="fa fa-chevron-right right_arr"></i>
         <div class="slides">
-
-        </div>
-        <div class="slides">
-
+            <img src="1.jpg" class="slide" alt="">
+            <img src="2.jpg"  class="slide" alt="">
+            <img src="3.webp"  class="slide" alt="">
         </div>
     </div>
 </body>
@@ -218,5 +252,33 @@ $(".l2").toggleClass("active2");
 $(".l3").toggleClass("active3");
 
    });
+   var counter=0;
+   var c=0;
+   slide=document.querySelectorAll(".slide");
+   slide.forEach((slide,index) => {
+    slide.style.left=`${index*100}%`;
+    c+=1;
+   });
+   var d=1-c;
+   function prev(){
+    if(counter>d){
+        counter--;
+    }
+    
+    slidemove();
+   }
+   function next(){
+    if(counter<c-1){
+        counter++;
+    }
+    
+    slidemove();
+   }
+   function slidemove(){
+    slide.forEach((slide) =>{
+        slide.style.transform=`translateX(-${counter*100}%)`
+    })
+   }
+   
 </script>
 </html>
