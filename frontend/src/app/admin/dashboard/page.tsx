@@ -1,4 +1,10 @@
+"use client";
+
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+
 export default function AdminDashboardPage() {
+  useAdminAuth();
+
   return (
     <>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>

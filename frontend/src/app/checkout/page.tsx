@@ -3,18 +3,12 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { OrderFormData } from "@/types/order";
-import { CartItem } from "@/types/cart";
+import { createOrder } from "@/services/api";
+import { useCart } from "@/context/CartContext";
 
 export default function CheckoutPage() {
-  // TEMP product (later comes from cart or backend)
-  const cartItem: CartItem = {
-    productId: "1",
-    name: "Handmade Vase",
-    price: 1200,
-    image: "/vase.jpg",
-    quantity: 1,
-  };
-
+  const { cart, clearCart } = useCart();
+  
   const [formData, setFormData] = useState<OrderFormData>({
     customerName: "",
     email: "",
@@ -22,7 +16,21 @@ export default function CheckoutPage() {
     address: "",
   });
 
-  const totalAmount = cartItem.price * cartItem.quantity;
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  if (cart.length === 0 && !success) {
+    return (
+      <>
+        <Navbar />
+        <p className="text-center p-8 text-lg">Your cart is empty.</p>
+      </>
+    );
+  }
+
+  // Determine items to display (single item for now based on context implementation)
+  const cartItem = cart[0]; 
+  const totalAmount = cartItem ? cartItem.price * cartItem.quantity : 0;
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,18 +41,51 @@ export default function CheckoutPage() {
     });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
 
     const orderPayload = {
-      customer: formData,
-      items: [cartItem],
+      customerName: formData.customerName,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      products: [
+        {
+          productId: cartItem.productId,
+          quantity: cartItem.quantity,
+        },
+      ],
       totalAmount,
     };
 
-    console.log("Order Payload:", orderPayload);
-    alert("Order submitted (frontend only)");
+    try {
+      await createOrder(orderPayload);
+      clearCart();
+      setSuccess(true);
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  if (success) {
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-xl mx-auto p-8 text-center">
+          <h1 className="text-3xl font-bold mb-4">Order Placed 🎉</h1>
+          <p className="text-gray-600">
+            Thank you! We will contact you shortly.
+          </p>
+        </div>
+      </>
+    );
+  }
+
+  // Safe check if somehow component renders without items
+  if (!cartItem) return null;
 
   return (
     <>
@@ -126,9 +167,10 @@ export default function CheckoutPage() {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 rounded hover:opacity-90"
+              disabled={loading}
+              className="w-full bg-black text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
             >
-              Place Order
+              {loading ? "Placing Order..." : "Place Order"}
             </button>
           </form>
         </section>

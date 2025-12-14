@@ -1,6 +1,40 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getAdminProducts, deleteProduct } from "@/services/api";
+import { Product } from "@/types/product";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 
 export default function AdminProductsPage() {
+  useAdminAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  async function fetchProducts() {
+    try {
+      const data = await getAdminProducts();
+      setProducts(data);
+    } catch (error) {
+      alert("Failed to load products");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    await deleteProduct(id);
+    fetchProducts();
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  if (loading) return <p>Loading products...</p>;
+
   return (
     <>
       <div className="flex justify-between items-center mb-6">
@@ -23,16 +57,26 @@ export default function AdminProductsPage() {
         </thead>
 
         <tbody>
-          <tr className="border-b">
-            <td className="p-4">Handmade Vase</td>
-            <td className="p-4 text-center">₹1200</td>
-            <td className="p-4 text-center space-x-2">
-              <button className="px-3 py-1 border rounded">Edit</button>
-              <button className="px-3 py-1 border rounded text-red-600">
-                Delete
-              </button>
-            </td>
-          </tr>
+          {products.map((product) => (
+            <tr key={product._id} className="border-b">
+              <td className="p-4">{product.name}</td>
+              <td className="p-4 text-center">₹{product.price}</td>
+              <td className="p-4 text-center space-x-2">
+                <Link
+                  href={`/admin/products/edit/${product._id}`}
+                  className="px-3 py-1 border rounded"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="px-3 py-1 border rounded text-red-600"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
