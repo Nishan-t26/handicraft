@@ -11,7 +11,8 @@ export async function getProducts(): Promise<Product[]> {
     throw new Error("Failed to fetch products");
   }
 
-  return res.json();
+  const json = await res.json();
+  return json.data || [];
 }
 
 export async function getProductById(id: string): Promise<Product> {
@@ -23,7 +24,8 @@ export async function getProductById(id: string): Promise<Product> {
     throw new Error("Failed to fetch product");
   }
 
-  return res.json();
+  const json = await res.json();
+  return json.data;
 }
 
 export async function createOrder(orderData: any) {
@@ -50,7 +52,8 @@ export async function getAdminProducts() {
   });
 
   if (!res.ok) throw new Error("Failed to fetch products");
-  return res.json();
+  const json = await res.json();
+  return json.data || [];
 }
 
 /* ADMIN: LOGIN */

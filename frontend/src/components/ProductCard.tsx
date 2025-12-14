@@ -3,12 +3,16 @@
 import { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
   const router = useRouter();
 
-  function handleAddToCart() {
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
     addToCart({
       productId: product._id,
       name: product.name,
@@ -21,21 +25,57 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="border border-card-border rounded p-4 hover:shadow bg-card">
-      <img
-        src={product.images[0]}
-        alt={product.name}
-        className="h-40 w-full object-cover"
-      />
-      <h2 className="mt-2 font-semibold">{product.name}</h2>
-      <p className="text-sm text-text-secondary">₹{product.price}</p>
+    <Link href={`/products/${product._id}`}>
+      <article className="card card-interactive group cursor-pointer h-full flex flex-col">
+        {/* Image Container */}
+        <div className="relative overflow-hidden">
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
+          />
 
-      <button
-        onClick={handleAddToCart}
-        className="mt-3 w-full bg-btn-primary hover:bg-btn-primary-hover text-btn-text py-2 rounded transition-colors"
-      >
-        Add to Cart
-      </button>
-    </div>
+          {/* Quick Add Overlay */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <button
+              onClick={handleAddToCart}
+              className="btn btn-accent transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+            >
+              Add to Cart
+            </button>
+          </div>
+
+          {/* Category Badge */}
+          {product.category && (
+            <span className="absolute top-3 left-3 badge badge-secondary">
+              {product.category}
+            </span>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-5 flex flex-col flex-grow">
+          <h3 className="font-heading text-lg font-semibold text-text-primary group-hover:text-primary transition-colors line-clamp-1">
+            {product.name}
+          </h3>
+
+          {product.description && (
+            <p className="mt-2 text-sm text-text-secondary line-clamp-2 flex-grow">
+              {product.description}
+            </p>
+          )}
+
+          <div className="mt-4 flex items-center justify-between">
+            <span className="price text-xl">₹{product.price.toLocaleString()}</span>
+
+            {product.stock !== undefined && product.stock <= 5 && product.stock > 0 && (
+              <span className="badge badge-warning text-xs">
+                Only {product.stock} left
+              </span>
+            )}
+          </div>
+        </div>
+      </article>
+    </Link>
   );
 }
