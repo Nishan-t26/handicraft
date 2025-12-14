@@ -21,18 +21,18 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="border rounded p-4 hover:shadow">
+    <div className="border border-card-border rounded p-4 hover:shadow bg-card">
       <img
         src={product.images[0]}
         alt={product.name}
         className="h-40 w-full object-cover"
       />
       <h2 className="mt-2 font-semibold">{product.name}</h2>
-      <p className="text-sm text-gray-600">₹{product.price}</p>
+      <p className="text-sm text-text-secondary">₹{product.price}</p>
 
       <button
         onClick={handleAddToCart}
-        className="mt-3 w-full bg-black text-white py-2 rounded"
+        className="mt-3 w-full bg-btn-primary hover:bg-btn-primary-hover text-btn-text py-2 rounded transition-colors"
       >
         Add to Cart
       </button>

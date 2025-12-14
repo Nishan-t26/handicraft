@@ -76,7 +76,7 @@ export default function CheckoutPage() {
         <Navbar />
         <div className="max-w-xl mx-auto p-8 text-center">
           <h1 className="text-3xl font-bold mb-4">Order Placed 🎉</h1>
-          <p className="text-gray-600">
+          <p className="text-text-secondary">
             Thank you! We will contact you shortly.
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function CheckoutPage() {
 
       <main className="max-w-5xl mx-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* LEFT: Order Summary */}
-        <section className="bg-white p-6 rounded shadow">
+        <section className="bg-card p-6 rounded shadow">
           <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
           <div className="flex gap-4">
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
 
             <div className="flex-1">
               <h3 className="font-semibold">{cartItem.name}</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-text-secondary">
                 Quantity: {cartItem.quantity}
               </p>
               <p className="mt-2 font-medium">₹{cartItem.price}</p>
@@ -121,7 +121,7 @@ export default function CheckoutPage() {
         </section>
 
         {/* RIGHT: Checkout Form */}
-        <section className="bg-white p-6 rounded shadow">
+        <section className="bg-card p-6 rounded shadow">
           <h2 className="text-xl font-bold mb-4">Shipping Details</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -168,7 +168,7 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
+              className="w-full bg-btn-primary hover:bg-btn-primary-hover text-btn-text py-2 rounded transition-colors disabled:opacity-50"
             >
               {loading ? "Placing Order..." : "Place Order"}
             </button>
